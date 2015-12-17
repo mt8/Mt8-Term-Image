@@ -14,7 +14,8 @@
 			add_action( 'admin_menu', array( &$this, 'admin_menu') );
 			add_action( 'category_add_form_fields',  array( &$this, 'category_add_form_fields' ) );
 			add_action( 'category_edit_form_fields', array( &$this, 'category_edit_form_fields' ) );
-			add_action( 'edited_term', array( &$this, 'edited_term' ), 10, 3 );
+			add_action( 'edited_term',  array( &$this, 'saved_term' ), 10, 3 );
+			add_action( 'created_term', array( &$this, 'saved_term' ), 10, 3 );
 			
 		}
 		
@@ -31,16 +32,20 @@
 			wp_enqueue_style(  'mt8-term-image-css', plugins_url("css/mt8-term-image.css", __FILE__ ) );
 		}
 		
-		
 		public function category_add_form_fields( $taxonomy ) {
-			$this->category_addon_form_fields($taxonomy);
-		}
-		public function category_edit_form_fields( $tag, $taxonomy ) {
-			$this->category_addon_form_fields( $taxonomy, $tag );
+		?>
+		<div class="form-field term-image-wrap">
+			<label for="term-image"><?php _e( 'Term Image' ); ?></label>
+			<button id="mt8-term-image-up"><?php _e( 'Choose Term Image' ); ?></button>
+			<div id="mt8-term-image">
+				<input type="hidden" id="mt8-term-image-inp" name="mt8_term_image_inp" /> 
+			</div>
+		</div>
+		<?php
 		}
 		
-		public function category_addon_form_fields( $taxonomy, $tag = null ) {
-		?>	
+		public function category_edit_form_fields( $tag, $taxonomy ) {
+		?>
 		<tr class="form-field term-image-wrap">
 			<th scope="row"><label for="term-image"><?php _e( 'Term Image' ); ?></label></th>
 			<td>
@@ -51,7 +56,7 @@
 				</div>
 			</td>
 		</tr>
-		<?php	
+		<?php
 		}
 
 		public function the_term_image_id( $tag ) {
@@ -84,7 +89,7 @@
 			}
 		}
 		
-		public function edited_term( $term_id, $tt_id, $taxonomy ) {
+		public function saved_term( $term_id, $tt_id, $taxonomy ) {
 			
 			if ( 'category' !== $taxonomy ) {
 				return;

@@ -14,6 +14,7 @@ jQuery(document).ready(function($){
         }); 
         custom_uploader.on('select', function() {
             var images = custom_uploader.state().get('selection');
+			$('#mt8-term-image').html('');
             images.each(function(file){
                 $('#mt8-term-image').append('<img src="'+file.toJSON().url+'" />');
                 $('#mt8-term-image-inp').val(file.toJSON().id);				
